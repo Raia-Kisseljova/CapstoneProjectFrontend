@@ -1,0 +1,35 @@
+/* NAVBAR */
+.logo {
+  width: 65px;
+}
+
+.navbar {
+  font-family: var(--ff-main), sans-serif;
+  font-size: 16px;
+  font-weight: 100;
+}
+
+.bold {
+  color: #fa759e !important;
+}
+
+.search-btn {
+  width: 92px;
+  height: 45px;
+  border: none;
+  border-radius: 50px;
+  margin-right: 23px;
+  background-color: #14f0c9;
+  font-family: var(--ff-main), sans-serif;
+  font-size: 16px;
+}
+
+.post-btn {
+  width: 92px;
+  height: 45px;
+  border: 1.5px solid #736d6d;
+  border-radius: 50px;
+  background-color: white;
+  font-family: var(--ff-main), sans-serif;
+  font-size: 16px;
+}

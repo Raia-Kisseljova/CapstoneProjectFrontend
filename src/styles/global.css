@@ -1,0 +1,17 @@
+html {
+  --ff-main: "Carter One";
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: gray;
+  font-size: 16px;
+}
