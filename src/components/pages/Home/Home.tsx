@@ -26,7 +26,7 @@ export default function Home() {
         <Row className="mx-3">
           <Col className={styles['section-2']}>
             <p>Be a proud foster parent. Adopt your new family member today.</p>
-            <button className='post-btn'>Post</button>
+            <button className='post-btn mr-5'>Post</button>
             <button className='search-btn'>Search</button>
           </Col>
         </Row>
@@ -42,7 +42,7 @@ export default function Home() {
             <p className={styles['sub-title']}>Unconditional love is as close as your nearest shelter.</p>
             <label>
               <input type="text" placeholder="City" className={styles['search-field']} />
-              <button className='search-btn-group'>Search</button>
+              <button className={styles['search-btn-group']}>Search</button>
             </label>
           </Col>
         </Row>
