@@ -1,18 +1,17 @@
 /* LOGIN PAGE */
 .body {
+  height: 80vh;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.videopart {
-  margin-top: 25px;
+  background-color: var(--color-green);
 }
 
 .videopart video {
-  width: 200%;
+  width: 205%;
   padding: 0 auto;
+  box-shadow: 0 9px 14px -3px #3f3f3fbb;
 }
 
 .form {
@@ -28,10 +27,11 @@
 }
 
 .form h4 {
+  font-size: 24px;
   margin: 15px 0;
   /* color: #fff; */
   font-family: var(--ff-main), sans-serif;
-  color: #000;
+  color: white;
 }
 
 .form input {
@@ -46,6 +46,10 @@
   outline: none;
 }
 
+.form input:invalid {
+  border: 1px solid red;
+}
+
 @media only screen and (max-width: 280px) {
   .form {
     position: absolute;
@@ -56,6 +60,10 @@
     align-items: center;
     justify-content: center;
     margin: 0;
+  }
+
+  .form h4 {
+    color: black;
   }
 
   .videopart video {
@@ -80,6 +88,10 @@
     width: 100vw;
     padding: 0 auto;
   }
+
+  .form h4 {
+    color: black;
+  }
 }
 
 @media only screen and (max-width: 740px) {
@@ -97,5 +109,9 @@
   .videopart video {
     width: 100vw;
     padding: 0 auto;
+  }
+
+  .form h4 {
+    color: black;
   }
 }
