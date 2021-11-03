@@ -1,17 +1,17 @@
 .btn {
   width: 92px;
-  height: 35px;
+  height: 40px;
   border: 1px solid white;
   border-radius: 50px;
   color: white;
   font-family: var(--ff-main), sans-serif;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .btn-blue {
-  background-color: #0fa6cc;
+  background-color: var(--color-blue);
 }
 
 .btn-pink {
-  background-color: #fa759e;
+  background-color: var(--color-pink);
 }
