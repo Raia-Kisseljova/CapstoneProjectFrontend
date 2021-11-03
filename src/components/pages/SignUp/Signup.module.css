@@ -1,42 +1,4 @@
 /* SIGNUP USER */
-.body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.body label {
-  font-family: var(--ff-main), sans-serif;
-  font-size: 10px;
-  font-weight: 100;
-}
-
-.body input[type="text"] {
-  padding-left: 20px;
-  border: 1.5px solid #fa759e;
-  border-radius: 50px;
-}
-
-.body input[type="password"] {
-  padding-left: 20px;
-  border: 1.5px solid #fa759e;
-  border-radius: 50px;
-}
-
-.body input[type="date"] {
-  padding-left: 20px;
-  border: 1.5px solid #fa759e;
-  border-radius: 50px;
-}
-
-.body img {
-  width: 100%;
-  object-fit: contain;
-}
-
-.header {
-  font-family: var(--ff-main), sans-serif;
-}
 
 /* .signup-btn {
   width: 92px;
@@ -49,35 +11,51 @@
   font-family: var(--ff-main), sans-serif;
   font-size: 16px;
 } */
+.signupbanner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}
 
-/* UPLOAD FILE STYLES */
-.file-upload {
+.banners {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.org-banner {
+  margin-right: 25px;
   position: relative;
-  text-align: center;
-  overflow: hidden;
-  width: 72px;
-  border-radius: 50px;
-  margin-top: 15px;
-  background: #0fa6cc;
-  color: #fff;
-  cursor: pointer;
 }
 
-.file-upload:hover,
-.file-upload:active,
-.file-upload:focus {
-  background: #0fa6cc;
-  cursor: pointer;
-}
-
-.file-upload input.upload {
+.org-btn {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 148px;
-  padding: 0;
-  margin: 0;
-  filter: alpha(opacity=0);
-  opacity: 0%;
-  cursor: pointer;
+  bottom: 25px;
+  left: 25px;
+  border: none;
+  border-radius: 50px;
+  width: 85px;
+  height: 30px;
+  font-family: var(--ff-main);
+  color: white;
+  background-color: #ff666e;
+}
+
+.user-banner {
+  margin-left: 25px;
+  position: relative;
+}
+
+.user-btn {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  border: none;
+  border-radius: 50px;
+  width: 85px;
+  height: 30px;
+  font-family: var(--ff-main);
+  color: white;
+  background-color: #5663c0;
 }
