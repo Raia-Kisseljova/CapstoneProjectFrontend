@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom';
 import AddAnimal from './components/pages/AddAnimal';
 import AnimalProfile from './components/pages/AnimalProfile';
 import Home from './components/pages/Home';
@@ -10,8 +10,8 @@ import UserProfile from './components/pages/UserProfile';
 import UserSettings from './components/pages/UserSettings';
 import NavBar from './components/shared/Navbar/NavBar';
 
-
 function App() {
+  // console.log('user is', user)
   return (
     <>
       <NavBar />
