@@ -1,3 +1,4 @@
+import OrganisationProfile from 'components/pages/OrganisationProfile';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AddAnimal from './components/pages/AddAnimal';
@@ -20,6 +21,7 @@ function App() {
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
         <Route path="/users/:username" component={UserProfile} />
+        <Route path="/organisation/:name" component={OrganisationProfile} />
         <Route path="/settings" component={UserSettings} />
         <Route path="/add-animal" component={AddAnimal} />
         <Route path="/search" component={Search} />
