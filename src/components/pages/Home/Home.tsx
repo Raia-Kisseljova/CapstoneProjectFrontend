@@ -1,7 +1,7 @@
+import Animation from 'components/shared/Animations/Animation';
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import styles from './Home.module.css';
-
 
 export default function Home() {
   return (
@@ -9,7 +9,7 @@ export default function Home() {
     <>
 
       <div>
-
+        <Animation />
         <Container fluid={true} className={styles['block-1']}>
           <Row className="mx-3">
 
@@ -20,28 +20,7 @@ export default function Home() {
 
             </Col>
             <Col >
-              <div className={styles.background}>
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
-                <img src="/assets/images/paw.png" alt="" />
 
-              </div>
               <img src="/assets/images/Shelter.png" alt="" className={styles["shelter-img"]} />
             </Col>
 
