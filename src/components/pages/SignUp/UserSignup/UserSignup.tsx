@@ -1,42 +1,34 @@
+import { ErrorMessage } from "@hookform/error-message";
+import { axios } from "api";
+import debouncePromise from 'awesome-debounce-promise';
+import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router';
+import ButtonCustom from '../../../shared/Button/ButtonCustom';
+import styles from './UserSignup.module.css';
 
-import React from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import { useHistory } from 'react-router'
-import { axios } from '../../../../api'
-import ButtonCustom from '../../../shared/Button/ButtonCustom'
-import styles from './UserSignup.module.css'
+type UserSignupFormData = {
+  fullname: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  nickname: string;
+  location: string;
+  about: string;
+  occupation: string;
+  hobby: string;
+  dateOfBirth: Date;
+}
+
 export default function UserSignup() {
-
-
-  const fullnameRef = React.useRef<HTMLInputElement>(null)
-  const emailRef = React.useRef<HTMLInputElement>(null)
-  const passwordRef = React.useRef<HTMLInputElement>(null)
-  const locationRef = React.useRef<HTMLInputElement>(null)
-  const nicknameRef = React.useRef<HTMLInputElement>(null)
-  const descriptionRef = React.useRef<HTMLInputElement>(null)
-  const hobbyRef = React.useRef<HTMLInputElement>(null)
-  const occupationRef = React.useRef<HTMLInputElement>(null)
-  const dateOfBirthRef = React.useRef<HTMLInputElement>(null)
-
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<UserSignupFormData>()
+  const password = watch('password')
   const history = useHistory()
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const formValues = {
-      fullname: fullnameRef.current?.value,
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
-      location: locationRef.current?.value,
-      nickname: nicknameRef.current?.value,
-      about: descriptionRef.current?.value,
-      hobby: hobbyRef.current?.value,
-      dateOfBirth: dateOfBirthRef.current?.value
-    }
-
-    console.log(formValues)
-    await axios.post("/signup/user", formValues)
-
+  const onSubmit = async (data: UserSignupFormData) => {
+    console.log(data)
+    await axios.post("/signup/user", data)
     history.push("/login")
   }
 
@@ -45,34 +37,62 @@ export default function UserSignup() {
       <Row >
         <Col>
           <div className={styles.frame}>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <label htmlFor="name">Fullname</label><br />
-              <input type="text" placeholder="name" id="name" ref={fullnameRef} /><br />
+              <input type="text" placeholder="name" id="name" {...register('fullname')} /><br />
+              <ErrorMessage errors={errors} name="fullname" as="p" />
 
-              <label htmlFor="email">Email</label><br />
-              <input type="text" placeholder="email" id="email" ref={emailRef} /><br />
+              <label htmlFor="email">Email *</label><br />
+              <input type="text" placeholder="email" id="email" {...register('email', {
+                required: 'This field is required.',
+                maxLength: 255,
+                validate: debouncePromise(validateEmail, 500),
+              })} /><br />
+              <ErrorMessage errors={errors} name="email" as="p" />
 
-              <label htmlFor="password">Password</label><br />
-              <input type="password" placeholder="password" id="password" ref={passwordRef} /><br />
+              <label htmlFor="password">Password *</label><br />
+              <input type="password" placeholder="password" id="password" {...register('password', { required: 'This field is required.', minLength: { value: 8, message: "Min 8 characters" }, maxLength: 100 })} /><br />
+              <ErrorMessage errors={errors} name="password" as="p" />
 
-              <label htmlFor="city">Location</label><br />
-              <input type="text" placeholder="location" id="city" ref={locationRef} /><br />
+              <label htmlFor="passwordConf">Password confrim *</label><br />
+              <input type="password" placeholder="password confirm" id="passwordConf" {...register('passwordConfirm', {
+                required: 'This field is required.',
+                minLength: 8,
+                maxLength: 100,
+                validate: (value) => {
+                  return value === password || 'Passwords do not match';
+                }
+              })} /><br />
+              <ErrorMessage errors={errors} name="passwordConfirm" as="p" />
+
+              <label htmlFor="city">City</label><br />
+              <input type="text" placeholder="City" id="city" {...register('location', { required: 'This field is required', maxLength: 100 })} /><br />
+              <ErrorMessage errors={errors} name="location" as="p" />
 
               <label htmlFor="nickname">Nickname</label><br />
-              <input type="text" placeholder="nickname" id="nickname" ref={nicknameRef} /><br />
+              <input type="text" placeholder="nickname" id="nickname" {...register('nickname',
+                {
+                  required: 'This field is required.',
+                  maxLength: { value: 100, message: 'This field is too long. Max 100 characters.' },
+                  validate: debouncePromise(validateNickname, 500)
+                })} /><br />
+              <ErrorMessage errors={errors} name="nickname" as="p" />
 
-              <label htmlFor="about">Description</label><br />
-              <input type="text" placeholder="description" id="about" ref={descriptionRef} /><br />
+              <label htmlFor="about">About you</label><br />
+              <input type="text" placeholder="description" id="about" {...register('about')} /><br />
+              <ErrorMessage errors={errors} name="about" as="p" />
 
               <label htmlFor="hobby">Hobby/interests</label><br />
-              <input type="text" placeholder="hobby" id="hobby" ref={hobbyRef} /><br />
+              <input type="text" placeholder="hobby" id="hobby" {...register('hobby')} /><br />
+              <ErrorMessage errors={errors} name="hobby" as="p" />
 
               <label htmlFor="occupation">Occupation</label><br />
-              <input type="text" placeholder="occupation" id="occupation" ref={occupationRef} /><br />
+              <input type="text" placeholder="occupation" id="occupation" {...register('occupation')} /><br />
+              <ErrorMessage errors={errors} name="occupation" as="p" />
 
               <label htmlFor="dob">Date of birth</label><br />
-              <input type="date" placeholder="date of birth" id="dob" ref={dateOfBirthRef} /><br />
-
+              <input type="date" placeholder="date of birth" id="dob" {...register('dateOfBirth')} /><br />
+              <ErrorMessage errors={errors} name="dateOfBirth" as="p" />
 
               <div className={styles['file-upload']}><label htmlFor="avatar" className={styles.avatarlabel}>Avatar</label><br />
                 <input type="file" id="avatar" className={styles.upload} /></div>
@@ -86,4 +106,14 @@ export default function UserSignup() {
       </Row>
     </Container >
   )
+}
+
+async function validateEmail(value: string) {
+  const res = await axios.get('user/is_unique', { params: { email: value } });
+  return res.data.email === true || 'Email already exists';
+}
+
+async function validateNickname(value: string) {
+  const res = await axios.get('user/is_unique', { params: { nickname: value } });
+  return res.data.nickname === true || `User with nickname ${res.data.nickname} already exists`;
 }
