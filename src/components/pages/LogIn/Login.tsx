@@ -1,3 +1,4 @@
+import Loader from 'components/shared/Loaders/Loader';
 import decode from 'jwt-decode';
 import React, { useRef } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -14,7 +15,7 @@ export default function Login() {
   const history = useHistory()
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
-
+  const [isLoading, setIsLoading] = React.useState(true)
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -47,38 +48,44 @@ export default function Login() {
     }
 
   }
-
+  setTimeout(() => {
+    setIsLoading(false)
+  }, 1000);
   return (
-    <Container fluid={true} className={styles.body}>
-      <Row >
-        <Col  >
-          <div className={styles.videopart}>
-            <video loop={true} autoPlay={true} muted={true}>
-              <source src="assets/images/videoLogin2.mp4" type="video/mp4" />
-            </video>
-          </div>
-        </Col>
-        <Col >
-          <form onSubmit={onSubmit}>
-            <div className={styles.form}>
-              <h4>Login to your account.</h4>
-              <input type="text" placeholder="email" ref={emailRef} />
-              <input type="password" placeholder="password" ref={passwordRef} />
-              <div>
-                <ButtonCustom color='blue' className='mr-4'>Login</ButtonCustom>
-                <Link to={"/signup"}>
-                  <ButtonCustom color='pink' className='' >Signup</ButtonCustom>
-                </Link>
-              </div>
-
+    <>
+      {isLoading && <Loader />}
+      <Container fluid={true} className={styles.body}>
+        <Row >
+          <Col  >
+            <div className={styles.videopart}>
+              <video loop={true} autoPlay={true} muted={true}>
+                <source src="assets/images/videoLogin2.mp4" type="video/mp4" />
+              </video>
             </div>
-          </form>
-        </Col>
+          </Col>
+          <Col >
+            <form onSubmit={onSubmit}>
+              <div className={styles.form}>
+                <h4>Login to your account.</h4>
+                <input type="text" placeholder="email" ref={emailRef} />
+                <input type="password" placeholder="password" ref={passwordRef} />
+                <div>
+                  <ButtonCustom color='blue' className='mr-4'>Login</ButtonCustom>
+                  <Link to={"/signup"}>
+                    <ButtonCustom color='pink' className='' >Signup</ButtonCustom>
+                  </Link>
+                </div>
+
+              </div>
+            </form>
+          </Col>
 
 
-      </Row>
+        </Row>
 
 
-    </Container>
+      </Container>
+
+    </>
   )
 }

@@ -54,7 +54,12 @@ export default function OrganisationSignup() {
               <ErrorMessage errors={errors} name="email" as="p" />
 
               <label htmlFor="password">Password *</label><br />
-              <input type="password" placeholder="password" id="password" {...register('password', { required: 'This field is required.', minLength: 8, maxLength: 100 })} /><br />
+              <input type="password" placeholder="password" id="password" {...register('password',
+                {
+                  required: 'This field is required.',
+                  minLength: 8,
+                  maxLength: 100
+                })} /><br />
               <ErrorMessage errors={errors} name="password" as="p" />
 
               <label htmlFor="passwordConf">Password confrim *</label><br />
