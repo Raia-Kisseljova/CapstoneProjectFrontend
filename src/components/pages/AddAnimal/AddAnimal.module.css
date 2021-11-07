@@ -1,0 +1,27 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame {
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.file-upload {
+  color: black;
+}
+
+.imglabel {
+  color: black;
+}
+
+.upload {
+  color: black;
+}
