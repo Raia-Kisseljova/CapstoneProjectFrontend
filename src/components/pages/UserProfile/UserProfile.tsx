@@ -49,6 +49,8 @@ export default function UserProfile() {
             </div>
             <div className={styles.favourites}>
               <button><img src="/assets/images/heart.png" alt="" /></button>
+              5
+
               <button><img src="/assets/images/email.png" alt="" /></button>
             </div>
           </Col>
