@@ -1,9 +1,9 @@
 import { axios } from 'api'
+import debouncePromise from 'awesome-debounce-promise'
 import ButtonCustom from 'components/shared/Button/ButtonCustom'
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import styles from './Search.module.css'
-
 
 interface Animal {
   id: string,
@@ -20,7 +20,16 @@ interface Animal {
 }
 
 export default function Search() {
+
+  const searchByCity = async () => {
+    const animalArray = await fetchAnimals()
+    console.log("too many requests")
+    const byCity = animalArray.filter((animal: any) => animal.location === inputRef.current?.value)
+    setSearch(byCity)
+  }
+
   const [search, setSearch] = React.useState<Animal[]>([])
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const fetchAnimals = async () => {
     const result = await axios.get('/animal')
@@ -57,7 +66,7 @@ export default function Search() {
       <Container >
         <Row className={styles.search}>
           <Col>
-            <input type="text" placeholder="Search in your city" width="100%" />
+            <input type="text" placeholder="Search in your city" width="100%" onChange={debouncePromise(searchByCity, 500)} ref={inputRef} />
           </Col>
           <Col>
             <div className={styles.categories}>

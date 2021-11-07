@@ -1,6 +1,7 @@
 import Animation from 'components/shared/Animations/Animation';
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import styles from './Home.module.css';
 
 export default function Home() {
@@ -32,7 +33,10 @@ export default function Home() {
             <Col className={styles['section-2']}>
               <p>Be a proud foster parent. Adopt your new family member today.</p>
               <button className='post-btn mr-5'>Post</button>
-              <button className='search-btn'>Search</button>
+              <Link to="/search">
+                <button className='search-btn'>Search</button>
+              </Link>
+
             </Col>
           </Row>
 
