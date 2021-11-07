@@ -4,7 +4,7 @@ export type TUser = {
   fullname: string;
   avatar: string;
   hobby: string;
-  age: string;
+  dateOfBirth: string;
   about: string;
   occupation: string;
   favoutires: string[];

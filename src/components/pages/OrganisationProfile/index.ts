@@ -1,1 +1,1 @@
-export { default } from "./OrganisationProfile";
+export { default } from './OrganisationProfile';

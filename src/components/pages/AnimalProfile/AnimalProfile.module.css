@@ -4,13 +4,13 @@
   align-items: center;
 }
 
-.imagepart {
+.image-part {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.imagepart img {
+.image-part img {
   width: 100%;
 }
 
@@ -30,6 +30,7 @@
 .about h4 {
   margin-bottom: 15px;
 }
+
 @media only screen and (max-width: 280px) {
   .about {
     width: 100vw;
@@ -59,13 +60,13 @@
     height: 100vh;
   }
 
-  .imagepart img {
+  .image-part img {
     width: 70vw;
   }
 }
 
 @media only screen and (max-width: 1700px) {
-  .imagepart img {
+  .image-part img {
     width: 40vw;
   }
 

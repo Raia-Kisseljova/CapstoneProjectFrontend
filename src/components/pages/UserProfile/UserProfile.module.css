@@ -13,8 +13,8 @@
   left: 30px;
   width: 170px;
   z-index: -1;
-  -webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px rgba(34, 34, 34, 0.452));
+  filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 45.2%));
 }
 
 .after {
@@ -23,8 +23,8 @@
   bottom: -25px;
   z-index: 5;
   width: 190px;
-  -webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px rgba(34, 34, 34, 0.363));
+  filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 36.3%));
 }
 
 .block {
@@ -32,35 +32,36 @@
   position: relative;
   border-radius: 50px;
   padding: 80px;
-  background: hsla(202, 71%, 27%, 1);
+  /* background: hsl(202deg 71% 27% / 100%); */
   color: white;
-  background: linear-gradient(
-    90deg,
-    hsla(202, 71%, 27%, 1) 0%,
-    hsla(176, 45%, 66%, 1) 100%
-  );
+  background:
+    linear-gradient(
+      90deg,
+      hsl(202deg 71% 27% / 100%) 0%,
+      hsl(176deg 45% 66% / 100%) 100%
+    );
 }
 
-.imgpart img {
-  -webkit-box-shadow: 12px 11px 12px 1px #000000;
-  box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.285);
+.img-part img {
+  box-shadow: 12px 11px 12px 1px #000;
+  box-shadow: 5px 5px 10px 1px rgb(0 0 0 / 28.5%);
   border-radius: 50%;
   width: 300px;
   height: 300px;
   z-index: 5;
 }
 
-.favourites {
+.favorites {
   margin-top: 20px;
   display: flex;
 }
 
-.favourites button {
+.favorites button {
   background-color: transparent;
   border: none;
 }
 
-.favourites button img {
+.favorites button img {
   width: 35px;
   height: 35px;
 }
@@ -103,7 +104,7 @@
     height: 100vh;
   }
 
-  .imgpart img {
+  .img-part img {
     width: 150px;
     height: 150px;
   }
@@ -124,7 +125,7 @@
     height: 100vh;
   }
 
-  .imgpart img {
+  .img-part img {
     width: 150px;
     height: 150px;
   }
@@ -145,7 +146,7 @@
     height: 100vh;
   }
 
-  .imgpart img {
+  .img-part img {
     width: 150px;
     height: 150px;
   }

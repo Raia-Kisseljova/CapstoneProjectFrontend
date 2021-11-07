@@ -1,1 +1,1 @@
-export { default } from "./AnimalProfile";
+export { default } from './AnimalProfile';

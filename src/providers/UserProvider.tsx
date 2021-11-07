@@ -1,8 +1,9 @@
-import { axios } from "api";
-import decode from "jwt-decode";
-import React from "react";
-import { TTokenPayload, TUser } from "types";
+import decode from 'jwt-decode';
 
+import React from 'react';
+
+import { axios } from 'api';
+import { TTokenPayload, TUser } from 'types';
 
 type TUserData = TUser | null | undefined;
 
@@ -13,7 +14,7 @@ type TUserContext = {
 
 const UserContext = React.createContext<TUserContext>({
   user: undefined,
-  logout: () => { },
+  logout: () => {},
 });
 
 export function useUser() {
@@ -24,7 +25,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<TUserData>();
 
   React.useEffect(() => {
-    const accessToken = window.localStorage.getItem("accessToken");
+    const accessToken = window.localStorage.getItem('accessToken');
 
     if (accessToken === null) {
       setUser(null);
@@ -32,7 +33,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
 
     const { _id, nickname } = decode(accessToken) as TTokenPayload;
-    console.log('HERE', { nickname })
+    console.log('HERE', { nickname });
 
     async function fetchUser() {
       try {
@@ -40,7 +41,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         setUser(res.data);
       } catch (err) {
         setUser(null);
-        window.localStorage.removeItem("accessToken");
+        window.localStorage.removeItem('accessToken');
       }
     }
 
@@ -48,13 +49,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = () => {
-    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem('accessToken');
     setUser(null);
   };
 
-  return (
-    <UserContext.Provider value={{ user, logout }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, logout }}>{children}</UserContext.Provider>;
 }

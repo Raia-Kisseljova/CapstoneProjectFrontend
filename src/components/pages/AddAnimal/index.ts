@@ -1,1 +1,1 @@
-export { default } from "./AddAnimal";
+export { default } from './AddAnimal';

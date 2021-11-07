@@ -1,24 +1,29 @@
 /* eslint no-console: 0 */
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const css = cssObjectToString;
+declare global {
+  interface Window {
+    // You can use this global variable to disable the logger.
+    __AXIOS_LOG_REQUESTS: boolean;
+  }
+}
 
 const Colors = {
-  GREEN: "#49cc90",
-  BLUE: "#61affe",
-  YELLOW: "#fcb900",
-  RED: "#f93e3e",
-  ORANGE: "#fca130",
-  CYAN: "#50e3c2",
-  PINK: "#ff0a54",
-  WHITE: "#fff",
-  GREY: "#808080",
+  GREEN: '#49cc90',
+  BLUE: '#61affe',
+  YELLOW: '#fcb900',
+  RED: '#f93e3e',
+  ORANGE: '#fca130',
+  CYAN: '#50e3c2',
+  PINK: '#ff0a54',
+  WHITE: '#fff',
+  GREY: '#808080',
 };
 
 const Emojis = {
-  REQUEST: "🚀 ",
-  SUCCESS: "👍 ",
-  ERROR: "👎 ",
+  REQUEST: '🚀 ',
+  SUCCESS: '👍 ',
+  ERROR: '👎 ',
 };
 
 const MethodColors = {
@@ -30,36 +35,35 @@ const MethodColors = {
 };
 
 const JSONColors = {
-  KEY: "#46afe3",
-  STRING: "#ff6ec7",
+  KEY: '#46afe3',
+  STRING: '#ff6ec7',
   NUMBER: Colors.GREEN,
   BOOLEAN: Colors.GREEN,
   NULL: Colors.GREY,
 };
 
 const StatusColors = {
-  SUCCESS: "#008000",
-  ERROR: "#ff0000",
+  SUCCESS: '#008000',
+  ERROR: '#ff0000',
 };
 
 const Styles = {
-  ARROW: css({ color: Colors.WHITE, fontWeight: "bold" }),
-  DURATION: css({ color: Colors.WHITE, fontWeight: "normal" }),
-  BASE_URL: css({ color: Colors.GREY, fontWeight: "bold" }),
+  ARROW: `color: ${Colors.WHITE}; font-weight: bold`,
+  DURATION: `color: ${Colors.WHITE}; font-weight: normal`,
+  BASE_URL: `color: ${Colors.GREY}; font-weight: bold`,
 };
 
 export function requestLogger(config: AxiosRequestConfig): AxiosRequestConfig {
-  if ((window as any).__PROPEROOM_LOG_REQUESTS === false) {
+  if (typeof window !== 'undefined' && window.__AXIOS_LOG_REQUESTS === false) {
     return config;
   }
 
   const method = config.method?.toUpperCase();
-  const methodColor =
-    MethodColors[method as keyof typeof MethodColors] ?? Colors.WHITE;
+  const methodColor = MethodColors[method as keyof typeof MethodColors] ?? Colors.WHITE;
   const [query, queryStyles] = paramsToQueryStrWithStyles(config.params);
 
-  const methodStyle = css({ color: methodColor, fontWeight: "bold" });
-  const urlStyle = css({ color: Colors.YELLOW, fontWeight: "bold" });
+  const methodStyle = `color: ${methodColor}; font-weight: bold`;
+  const urlStyle = `color: ${Colors.YELLOW}; font-weight: bold`;
 
   const args = [
     `${Emojis.REQUEST}%c${method} %c-> %c${config.baseURL}/%c${config.url}%c${query}`,
@@ -85,10 +89,8 @@ export function requestLogger(config: AxiosRequestConfig): AxiosRequestConfig {
   return config;
 }
 
-export function responseLogger(
-  response: AxiosResponse
-): AxiosResponse<unknown> {
-  if ((window as any).__PROPEROOM_LOG_REQUESTS === false) {
+export function responseLogger(response: AxiosResponse): AxiosResponse<unknown> {
+  if (typeof window !== 'undefined' && window.__AXIOS_LOG_REQUESTS === false) {
     return response;
   }
 
@@ -96,10 +98,9 @@ export function responseLogger(
   const url = `${response.config.baseURL}/${response.config.url}`;
   const queryStr = paramsToQueryStr(response.config.params);
 
-  const size = humanizeBytes(response.headers["content-length"] as any);
-  const duration =
-    Date.now() - (response.config as { startTime: number }).startTime;
-  const statusStyle = css({ color: StatusColors.SUCCESS, fontWeight: "bold" });
+  const size = bytesToString(Number(response.headers['content-length']));
+  const duration = Date.now() - (response.config as { startTime: number }).startTime;
+  const statusStyle = `color: ${StatusColors.SUCCESS}; font-weight: bold`;
 
   const args = [
     `${Emojis.SUCCESS}%c${status} ${response.statusText} %c[${duration}ms, ${size}] %c<- %c${url}${queryStr}`,
@@ -109,7 +110,10 @@ export function responseLogger(
     Styles.BASE_URL,
   ];
 
-  if (response.data !== undefined && Object.keys(response.data).length > 0) {
+  const logResponseBody =
+    response.data !== undefined && Object.keys(response.data).length > 0;
+
+  if (logResponseBody) {
     console.groupCollapsed(...args);
     console.log(...stringifyWithStyles(response.data));
     console.groupEnd();
@@ -121,7 +125,7 @@ export function responseLogger(
 }
 
 export function responseErrorLogger(error: AxiosError): Promise<never> {
-  if ((window as any).__PROPEROOM_LOG_REQUESTS === false) {
+  if (typeof window !== 'undefined' && window.__AXIOS_LOG_REQUESTS === false) {
     return Promise.reject(error);
   }
 
@@ -132,12 +136,11 @@ export function responseErrorLogger(error: AxiosError): Promise<never> {
   if (error.response) {
     const url = `${error.config.baseURL}/${error.config.url}`;
     const queryStr = paramsToQueryStr(error.config.params);
-    const size = humanizeBytes(error.response.headers["content-length"] as any);
-    const duration =
-      Date.now() - (error.config as { startTime: number }).startTime;
+    const size = bytesToString(Number(error.response.headers['content-length']));
+    const duration = Date.now() - (error.config as { startTime: number }).startTime;
 
     const { data, status, statusText } = error.response;
-    const statusStyle = css({ color: StatusColors.ERROR, fontWeight: "bold" });
+    const statusStyle = `color: ${StatusColors.ERROR}; font-weight: bold`;
 
     const args = [
       `${Emojis.ERROR}%c${status} ${statusText} %c[${duration}ms, ${size}] %c<- %c${url}${queryStr}`,
@@ -147,7 +150,9 @@ export function responseErrorLogger(error: AxiosError): Promise<never> {
       Styles.BASE_URL,
     ];
 
-    if (data !== undefined && Object.keys(data).length > 0) {
+    const logResponseBody = data !== undefined && Object.keys(data).length > 0;
+
+    if (logResponseBody) {
       console.groupCollapsed(...args);
       console.log(...stringifyWithStyles(data));
       console.groupEnd();
@@ -156,9 +161,9 @@ export function responseErrorLogger(error: AxiosError): Promise<never> {
     }
   } else {
     console.log(
-      "%cError: %cServer did not respond.",
-      css({ color: Colors.RED }),
-      css({ color: Colors.WHITE })
+      '%cError: %cServer did not respond.',
+      `color: ${Colors.RED}`,
+      `color: ${Colors.WHITE}`
     );
   }
 
@@ -167,16 +172,16 @@ export function responseErrorLogger(error: AxiosError): Promise<never> {
 
 function paramsToQueryStr(params?: Record<string, unknown>): string {
   if (!params) {
-    return "";
+    return '';
   }
 
   const paramsKeys = Object.keys(params);
   if (paramsKeys.length === 0) {
-    return "";
+    return '';
   }
 
-  const queryParams = paramsKeys.map((key) => `${key}=${params[key]}`);
-  return "?" + queryParams.join("&");
+  const queryParams = paramsKeys.map(key => `${key}=${params[key]}`);
+  return '?' + queryParams.join('&');
 }
 
 /**
@@ -187,105 +192,87 @@ function paramsToQueryStrWithStyles(
   params?: Record<string, unknown>
 ): [query: string, styles: string[]] {
   if (!params) {
-    return ["", []];
+    return ['', []];
   }
 
   const paramsKeys = Object.keys(params);
   if (paramsKeys.length === 0) {
-    return ["", []];
+    return ['', []];
   }
 
-  const queryParams = paramsKeys.map((key) => `%c${key}%c=%c${params[key]}%c`);
-  const styles = queryParams.reduce((acc) => {
+  const queryParams = paramsKeys.map(key => `%c${key}%c=%c${params[key]}%c`);
+  const styles = queryParams.reduce<string[]>(acc => {
     acc.push(
-      css({ color: Colors.YELLOW, fontWeight: "bold" }),
+      `color: ${Colors.YELLOW}; font-weight: bold`,
       Styles.BASE_URL,
-      css({ color: Colors.PINK, fontWeight: "bold" }),
+      `color: ${Colors.PINK}; font-weight: bold`,
       Styles.BASE_URL
     );
     return acc;
-  }, [] as string[]);
+  }, []);
 
-  const queryStr = "?" + queryParams.join("&");
+  const queryStr = '?' + queryParams.join('&');
   return [queryStr, styles];
 }
 
 // TODO: doesn't work correctly if JSON.stringify 'space' set to 0.
-function stringifyWithStyles(data: Record<string, unknown>) {
+function stringifyWithStyles(data: Record<string, unknown>): string[] {
   const styles: string[] = [];
   const json = JSON.stringify(data, null, 2);
 
   const keyValueRegExp = '("\\w+"): ?("?.*"?[^,\\n])?';
   const stringRegExp = '("[\\w\\s]+")';
-  const numberRegExp = "(-?[0-9.][0-9.]*)";
-  const booleanRegExp = "(true|false)";
-  const nullRegExp = "(null)";
+  const numberRegExp = '(-?[0-9.][0-9.]*)';
+  const booleanRegExp = '(true|false)';
+  const nullRegExp = '(null)';
 
   const jsonWithStyles = json.replace(
     new RegExp(
       `${keyValueRegExp}|${stringRegExp}|${numberRegExp}|${booleanRegExp}|${nullRegExp}`,
-      "g"
+      'g'
     ),
     (_, key, value, string, number, boolean, null_) => {
       // Matching primitives, which are elements inside an array.
       if (string) {
-        styles.push(
-          css({ color: JSONColors.STRING }),
-          css({ color: "revert" })
-        );
+        styles.push(`color: ${JSONColors.STRING}`, `color: revert`);
         return `%c${string}%c`;
       }
 
       if (number) {
-        styles.push(
-          css({ color: JSONColors.NUMBER }),
-          css({ color: "revert" })
-        );
+        styles.push(`color: ${JSONColors.NUMBER}`, `color: revert`);
         return `%c${number}%c`;
       }
 
       if (boolean) {
-        styles.push(
-          css({ color: JSONColors.BOOLEAN }),
-          css({ color: "revert" })
-        );
+        styles.push(`color: ${JSONColors.BOOLEAN}`, `color: revert`);
         return `%c${boolean}%c`;
       }
 
       if (null_) {
-        styles.push(css({ color: JSONColors.NULL }), css({ color: "revert" }));
+        styles.push(`color: ${JSONColors.NULL}`, `color: revert`);
         return `%c${null_}%c`;
       }
 
       // Matching a key: value pair.
-      styles.push(css({ color: JSONColors.KEY }), css({ color: "revert" }));
+      styles.push(`color: ${JSONColors.KEY}`, `color: revert`);
 
       if (value.includes('"')) {
-        styles.push(
-          css({ color: JSONColors.STRING }),
-          css({ color: "revert" })
-        );
+        styles.push(`color: ${JSONColors.STRING}`, `color: revert`);
         return `%c${key}%c: %c${value}%c`;
       }
 
       if (!isNaN(value)) {
-        styles.push(
-          css({ color: JSONColors.NUMBER }),
-          css({ color: "revert" })
-        );
+        styles.push(`color: ${JSONColors.NUMBER}`, `color: revert`);
         return `%c${key}%c: %c${value}%c`;
       }
 
-      if (value === "true" || value === "false") {
-        styles.push(
-          css({ color: JSONColors.BOOLEAN }),
-          css({ color: "revert" })
-        );
+      if (value === 'true' || value === 'false') {
+        styles.push(`color: ${JSONColors.BOOLEAN}`, `color: revert`);
         return `%c${key}%c: %c${value}%c`;
       }
 
-      if (value === "null") {
-        styles.push(css({ color: JSONColors.NULL }), css({ color: "revert" }));
+      if (value === 'null') {
+        styles.push(`color: ${JSONColors.NULL}`, `color: revert`);
         return `%c${key}%c: %c${value}%c`;
       }
 
@@ -296,29 +283,8 @@ function stringifyWithStyles(data: Record<string, unknown>) {
   return [jsonWithStyles, ...styles];
 }
 
-/**
- * Converts a react style object to a style string.
- */
-function cssObjectToString(cssObj: React.CSSProperties): string {
-  return Object.keys(cssObj).reduce((str, key, index, keys) => {
-    const keyKebab = key.replace(
-      /[A-Z]/g,
-      (letter) => "-" + letter.toLowerCase()
-    );
-    const keyCasted = key as keyof React.CSSProperties;
-    return (
-      str +
-      keyKebab +
-      ": " +
-      cssObj[keyCasted] +
-      ";" +
-      (index < keys.length - 1 ? " " : "")
-    );
-  }, "");
-}
-
-function humanizeBytes(bytes: number): string | number {
-  const sizes = ["b", "kb", "mb", "gb"];
+function bytesToString(bytes: number): string | number {
+  const sizes = ['b', 'kb', 'mb', 'gb'];
 
   for (let i = 1; i < sizes.length; i++) {
     if (bytes < Math.pow(1024, i)) {

@@ -1,0 +1,6 @@
+module.exports = {
+  extends: ['stylelint-config-standard'],
+  rules: {
+    'comment-empty-line-before': null,
+  },
+};

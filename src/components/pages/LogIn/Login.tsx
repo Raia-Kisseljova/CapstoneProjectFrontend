@@ -1,91 +1,117 @@
-import Loader from 'components/shared/Loaders/Loader';
+import { ErrorMessage } from '@hookform/error-message';
 import decode from 'jwt-decode';
-import React, { useRef } from 'react';
+
+import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
-import { axios, isAxiosError } from '../../../api';
-import { TTokenPayload } from '../../../types';
-import ButtonCustom from '../../shared/Button/ButtonCustom';
-import styles from "./Login.module.css";
+import { useForm } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 
+import { axios, isAxiosError } from 'api';
+import ButtonCustom from 'components/shared/Button';
+import useCurrentUser from 'hooks/useCurrentUser';
+import { TTokenPayload } from 'types';
 
+import styles from './Login.module.css';
 
-// import { Link } from
+type LoginFormData = {
+  email: string;
+  password: string;
+};
+
 export default function Login() {
-  const history = useHistory()
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const [isLoading, setIsLoading] = React.useState(true)
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { user } = useCurrentUser();
 
-    const emailInput = emailRef.current as HTMLInputElement;
-    const passwordInput = passwordRef.current as HTMLInputElement;
+  const queryClient = useQueryClient();
+  const history = useHistory();
 
-    const credentials = {
-      email: emailInput.value,
-      password: passwordInput.value,
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>();
 
+  // To display server authorization errors.
+  const [error, setError] = React.useState<string | null>(null);
+
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      if (credentials.email && credentials.password) {
-        const res = await axios.post("login", credentials);
-        // console.log(res)
-        const decodedToken = decode(res.data.accessToken) as TTokenPayload;
-        // console.log(decodedToken)
-        localStorage.setItem('accessToken', res.data.accessToken);
-        console.log(decodedToken);
-        history.push(`users/${decodedToken._id}`)
-      } else {
-        // console.log("Missing credentials")
-      }
+      const res = await axios.post('login', data);
 
+      // login.
+      const { nickname } = decode(res.data.accessToken) as TTokenPayload;
+      localStorage.setItem('accessToken', res.data.accessToken);
+
+      // fetch user data and store it in global state.
+      const res2 = await axios.get(`user/by_name/${nickname}`);
+      queryClient.setQueryData('CURRENT_USER', res2.data);
+
+      // redirect to profile.
+      history.push(`users/${nickname}`);
     } catch (err) {
       if (isAxiosError(err) && err.response) {
-        const { status, data } = err.response;
-        // console.log({ status, data });
+        const { data } = err.response;
+        if (data.message) {
+          setError(data.message);
+        }
       }
     }
+  };
 
+  if (user) {
+    return <Redirect to={`users/${user.nickname}`} />;
   }
-  setTimeout(() => {
-    setIsLoading(false)
-  }, 1000);
+
+  // setTimeout(() => {
+  //   setIsLoading(false);
+  // }, 1000);
+
   return (
     <>
-      {isLoading && <Loader />}
-      <Container fluid={true} className={styles.body}>
-        <Row >
-          <Col  >
-            <div className={styles.videopart}>
-              <video loop={true} autoPlay={true} muted={true}>
-                <source src="assets/images/videoLogin2.mp4" type="video/mp4" />
+      {/* {isLoading && <Loader />} */}
+      <Container fluid className={styles.body}>
+        <Row>
+          <Col>
+            <div className={styles['video-part']}>
+              <video loop autoPlay muted>
+                <source src='assets/images/videoLogin2.mp4' type='video/mp4' />
               </video>
             </div>
           </Col>
-          <Col >
-            <form onSubmit={onSubmit}>
+          <Col>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className={styles.form}>
                 <h4>Login to your account.</h4>
-                <input type="text" placeholder="email" ref={emailRef} />
-                <input type="password" placeholder="password" ref={passwordRef} />
+                {error}
+                <input
+                  type='text'
+                  placeholder='email'
+                  {...register('email', { required: 'This field is required.' })}
+                />
+                <ErrorMessage errors={errors} name='email' as='p' />
+
+                <input
+                  type='password'
+                  placeholder='password'
+                  {...register('password', { required: 'This field is required.' })}
+                />
+                <ErrorMessage errors={errors} name='password' as='p' />
+
                 <div>
-                  <ButtonCustom color='blue' className='mr-4'>Login</ButtonCustom>
-                  <Link to={"/signup"}>
-                    <ButtonCustom color='pink' className='' >Signup</ButtonCustom>
+                  <ButtonCustom color='blue' className='mr-4'>
+                    Log in
+                  </ButtonCustom>
+                  <Link to='/signup'>
+                    <ButtonCustom color='pink' className=''>
+                      Sign up
+                    </ButtonCustom>
                   </Link>
                 </div>
-
               </div>
             </form>
           </Col>
-
-
         </Row>
-
-
       </Container>
-
     </>
-  )
+  );
 }

@@ -7,11 +7,11 @@ import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router';
 
 import { axios } from 'api';
-import ButtonCustom from 'components/shared/Button/ButtonCustom';
 
+import ButtonCustom from '../../shared/Button/ButtonCustom';
 import styles from './UserSignup.module.css';
 
-type UserSignupFormData = {
+type UserSignUpFormData = {
   fullname: string;
   email: string;
   password: string;
@@ -24,29 +24,28 @@ type UserSignupFormData = {
   dateOfBirth: Date;
 };
 
-export default function UserSignup() {
+export default function UserSignUp() {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<UserSignupFormData>();
+  } = useForm<UserSignUpFormData>();
   const password = watch('password');
   const history = useHistory();
 
-  const onSubmit = async (data: UserSignupFormData) => {
-    console.log(data);
+  const onSubmit = async (data: UserSignUpFormData) => {
     await axios.post('/signup/user', data);
     history.push('/login');
   };
 
   return (
-    <Container fluid={true} className={styles.body}>
+    <Container fluid className={styles.body}>
       <Row>
         <Col>
           <div className={styles.frame}>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <label htmlFor='name'>Fullname</label>
+              <label htmlFor='name'>Fullname </label>
               <br />
               <input type='text' placeholder='name' id='name' {...register('fullname')} />
               <br />
@@ -82,7 +81,7 @@ export default function UserSignup() {
               <br />
               <ErrorMessage errors={errors} name='password' as='p' />
 
-              <label htmlFor='passwordConf'>Password confrim *</label>
+              <label htmlFor='passwordConf'>Password confirm *</label>
               <br />
               <input
                 type='password'
@@ -100,7 +99,7 @@ export default function UserSignup() {
               <br />
               <ErrorMessage errors={errors} name='passwordConfirm' as='p' />
 
-              <label htmlFor='city'>City</label>
+              <label htmlFor='city'>City *</label>
               <br />
               <input
                 type='text'
@@ -114,7 +113,7 @@ export default function UserSignup() {
               <br />
               <ErrorMessage errors={errors} name='location' as='p' />
 
-              <label htmlFor='nickname'>Nickname</label>
+              <label htmlFor='nickname'>Nickname *</label>
               <br />
               <input
                 type='text'
@@ -172,14 +171,14 @@ export default function UserSignup() {
               <ErrorMessage errors={errors} name='dateOfBirth' as='p' />
 
               <div className={styles['file-upload']}>
-                <label htmlFor='avatar' className={styles.avatarlabel}>
+                <label htmlFor='avatar' className={styles['avatar-label']}>
                   Avatar
                 </label>
                 <br />
                 <input type='file' id='avatar' className={styles.upload} />
               </div>
 
-              <ButtonCustom color='pink'>signup</ButtonCustom>
+              <ButtonCustom color='pink'>Sign Up</ButtonCustom>
             </form>
           </div>
         </Col>
@@ -195,7 +194,5 @@ async function validateEmail(value: string) {
 
 async function validateNickname(value: string) {
   const res = await axios.get('user/is_unique', { params: { nickname: value } });
-  return (
-    res.data.nickname === true || `User with nickname ${res.data.nickname} already exists`
-  );
+  return res.data.nickname === true || `User with nickname ${value} already exists`;
 }

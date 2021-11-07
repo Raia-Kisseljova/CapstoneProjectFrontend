@@ -1,88 +1,78 @@
+import { AxiosError } from 'axios';
 
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { useQuery } from 'react-query';
 import { useParams } from 'react-router';
-import { axios } from "../../../api";
-import { TUser } from '../../../types';
-// import { Redirect } from 'react-router';
-// import { useUser } from '../../../hooks/useUser';
-import styles from "./UserProfile.module.css";
+
+import { axios } from 'api';
+import Loader from 'components/shared/Loaders/Loader';
+import { TUser } from 'types';
+
+import styles from './UserProfile.module.css';
 
 export default function UserProfile() {
-  // const { user } = useUser();
   const { username } = useParams() as { username: string };
-  const [userData, setUserData] = React.useState<TUser | undefined>();
 
-  // const token = localStorage.getItem("accessToken")
-  // const decodedToken = decode(token as string) as Token;
-  // const nickname = decodedToken.nickname;
+  const userQuery = useQuery<TUser, AxiosError>(['USER_DETAIL', username], () =>
+    axios.get(`user/by_name/${username}`).then(res => res.data)
+  );
 
-  React.useEffect(() => {
-    const result = async () => {
-      const answer = await axios.get(`user/${username}`);
-      setUserData(answer.data)
-    }
-    result()
-  }, [username]);
+  if (userQuery.isLoading) {
+    return <Loader />;
+  }
 
-  // if (user === undefined) {
-  //   return <div>Loading</div>;
-  // }
-
-  // if (user === null) {
-  //   return <Redirect to='/login' />
-  // }
-
-  // console.log(userData);
+  if (userQuery.isError) {
+    userQuery.error;
+    return <div>Not Found</div>;
+  }
 
   return (
     <Container className={styles.body}>
       <Container className={styles.block}>
-        <img src="/assets/images/4-1.png" className={styles.before} />
-        <img src="/assets/images/5.png" className={styles.after} />
-        <Row className="">
-
+        <img src='/assets/images/4-1.png' className={styles.before} alt='Before' />
+        <img src='/assets/images/5.png' className={styles.after} alt='After' />
+        <Row className=''>
           <Col>
-            <div className={styles.imgpart}>
-              <img src="/assets/images/adoptme.jpg" alt="" />
-
+            <div className={styles['img-part']}>
+              <img src='/assets/images/adoptme.jpg' alt='Adopt me' />
             </div>
-            <div className={styles.favourites}>
-              <button><img src="/assets/images/heart.png" alt="" /></button>
+            <div className={styles.favorites}>
+              <button>
+                <img src='/assets/images/heart.png' alt='Heart' />
+              </button>
               5
-
-              <button><img src="/assets/images/email.png" alt="" /></button>
+              <button>
+                <img src='/assets/images/email.png' alt='Email' />
+              </button>
             </div>
           </Col>
           <Col>
             <div className={styles.about}>
               <div className={styles.name}>
-                <span>Nickname: </span><br />
+                <span>Nickname: {userQuery.data?.nickname}</span>
+                <br />
               </div>
 
-
-
               <div className={styles.bio}>
-                <span>About: Lorem ipsum dolor sit amet consectetur adipisicing elit.Assumenda, sequi animi ad veritatis libero distinctio aut harum veniam voluptatum quod!Dolorem culpa voluptatibus et vel, mollitia at exercitationem facere aliquid?</span><br />
-
+                <span>{userQuery.data?.about}</span>
+                <br />
               </div>
 
               <div className={styles.contact}>
-                <span>Hobby and interests: </span><br />
-                <span>Occupation: </span><br />
-                <span>City: </span><br />
-                <span>Date of Birth: </span><br />
+                <span>Hobby and interests: </span>
+                <br />
+                <span>Occupation: {userQuery.data?.occupation}</span>
+                <br />
+                <span>City: </span>
+                <br />
+                <span>Date of Birth: {userQuery.data?.dateOfBirth}</span>
+                <br />
               </div>
             </div>
           </Col>
-
-
         </Row>
-
-
       </Container>
-
-
-    </Container >
-  )
+    </Container>
+  );
 }

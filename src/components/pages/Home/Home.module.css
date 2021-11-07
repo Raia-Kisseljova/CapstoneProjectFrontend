@@ -64,8 +64,8 @@
 }
 
 .block-2 img {
-  -webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px rgba(34, 34, 34, 0.541));
+  filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 54.1%));
 }
 
 .search-field {
