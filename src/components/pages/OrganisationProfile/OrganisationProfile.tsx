@@ -1,9 +1,35 @@
+import { AxiosError } from 'axios';
+
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router';
+
+import { axios } from 'api';
+import Loader from 'components/shared/Loaders/Loader';
+import { TOrganisation } from 'types';
 
 import styles from './OrganisationProfile.module.css';
 
 export default function OrganisationProfile() {
+  const { name } = useParams() as { name: string };
+
+  const organisationQuery = useQuery<TOrganisation, AxiosError>(
+    ['ORGANISATION_DETAIL', name],
+    () => axios.get(`/organisation/${name}`).then(res => res.data)
+  );
+
+  if (organisationQuery.isLoading) {
+    return <Loader />;
+  }
+
+  if (organisationQuery.isError) {
+    organisationQuery.error;
+    return <div>Not Found</div>;
+  }
+
+  console.log('here');
+
   return (
     <Container fluid className={styles.body}>
       <Container className={styles.block}>
@@ -17,23 +43,12 @@ export default function OrganisationProfile() {
             </div>
             <div className={styles.about}>
               <h4>Who we are</h4>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
-                laboriosam tenetur, at dicta atque cupiditate, aperiam ad repudiandae fuga
-                vel accusantium adipisci debitis tempora quasi nesciunt. Error
-                consequuntur explicabo temporibus? Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Fugiat laboriosam in sint modi accusamus quibusdam quo,
-                laborum culpa provident neque voluptatibus minus, illum sed mollitia
-                dolor. Minima beatae aperiam quo. Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Hic, quidem. Non, reprehenderit fugit id ratione
-                possimus ipsa architecto temporibus doloribus? Eaque tenetur assumenda
-                praesentium, eius minus ratione nemo. Optio, quas?
-              </p>
+              <p>{organisationQuery.data?.about}</p>
             </div>
 
             <div className={styles.contacts}>
               <h4>Find out more</h4>
-              <p>www.website.com</p>
+              <p>{organisationQuery.data?.website}</p>
             </div>
             <div></div>
           </Col>
