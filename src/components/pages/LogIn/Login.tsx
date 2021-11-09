@@ -10,7 +10,8 @@ import { Link, Redirect, useHistory } from 'react-router-dom';
 import { axios, isAxiosError } from 'api';
 import ButtonCustom from 'components/shared/Button';
 import useCurrentUser from 'hooks/useCurrentUser';
-import { TTokenPayload } from 'types';
+import { Role, TTokenPayload } from 'types';
+import { getProfilePath } from 'utils';
 
 import styles from './Login.module.css';
 
@@ -39,15 +40,19 @@ export default function Login() {
       const res = await axios.post('login', data);
 
       // login.
-      const { nickname } = decode(res.data.accessToken) as TTokenPayload;
+      const { nickname, role } = decode(res.data.accessToken) as TTokenPayload;
       localStorage.setItem('accessToken', res.data.accessToken);
 
-      // fetch user data and store it in global state.
-      const res2 = await axios.get(`user/by_name/${nickname}`);
+      let res2;
+      if (role === Role.USER) {
+        res2 = await axios.get(`user/by_name/${nickname}`);
+      } else {
+        res2 = await axios.get(`organisation/${nickname}`);
+      }
       queryClient.setQueryData('CURRENT_USER', res2.data);
 
       // redirect to profile.
-      history.push(`users/${nickname}`);
+      history.push(role === Role.USER ? `users/${nickname}` : `organisation/${nickname}`);
     } catch (err) {
       if (isAxiosError(err) && err.response) {
         const { data } = err.response;
@@ -59,7 +64,7 @@ export default function Login() {
   };
 
   if (user) {
-    return <Redirect to={`users/${user.nickname}`} />;
+    return <Redirect to={getProfilePath(user)} />;
   }
 
   // setTimeout(() => {

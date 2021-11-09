@@ -7,6 +7,7 @@ import { useParams } from 'react-router';
 
 import { axios } from 'api';
 import Loader from 'components/shared/Loaders/Loader';
+import useCurrentUser from 'hooks/useCurrentUser';
 import { TUser } from 'types';
 
 import styles from './UserProfile.module.css';

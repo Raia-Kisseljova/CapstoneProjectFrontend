@@ -4,6 +4,7 @@ import { useQueryClient } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 
 import useCurrentUser from 'hooks/useCurrentUser';
+import { getProfilePath } from 'utils';
 
 export default function NavBar() {
   const { user } = useCurrentUser();
@@ -28,7 +29,7 @@ export default function NavBar() {
           </Link>
 
           {user && (
-            <Link to={`/users/${user.nickname}`} className='nav-link bold'>
+            <Link to={getProfilePath(user)} className='nav-link bold'>
               Profile
             </Link>
           )}

@@ -3,6 +3,8 @@ import { Container, Row } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 
 import useCurrentUser from 'hooks/useCurrentUser';
+import { Role } from 'types';
+import { getProfilePath } from 'utils';
 
 import OrganisationSignup from './OrganisationSignup';
 import styles from './Signup.module.css';
@@ -13,7 +15,7 @@ export default function SignUp() {
   const [form, setForm] = React.useState('');
 
   if (user) {
-    return <Redirect to={`users/${user.nickname}`} />;
+    return <Redirect to={getProfilePath(user)} />;
   }
 
   return (

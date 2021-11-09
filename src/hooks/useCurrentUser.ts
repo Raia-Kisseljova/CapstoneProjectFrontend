@@ -3,7 +3,7 @@ import decode from 'jwt-decode';
 import { useQuery } from 'react-query';
 
 import { axios } from 'api';
-import { TTokenPayload, TUser } from 'types';
+import { Role, TOrganisation, TTokenPayload, TUser } from 'types';
 
 export default function useCurrentUser() {
   const { data: user, ...rest } = useQuery('CURRENT_USER', () => isAuthenticated(), {
@@ -13,15 +13,22 @@ export default function useCurrentUser() {
   return { user, ...rest };
 }
 
-async function isAuthenticated(): Promise<TUser | null> {
+async function isAuthenticated(): Promise<TUser | TOrganisation | null> {
   const accessToken = window.localStorage.getItem('accessToken');
 
   if (accessToken === null) {
     return null;
   }
 
-  const { nickname } = decode(accessToken) as TTokenPayload;
-  const res = await axios.get(`user/by_name/${nickname}`);
+  const { nickname, role } = decode(accessToken) as TTokenPayload;
+
+  let res;
+
+  if (role === Role.USER) {
+    res = await axios.get(`user/by_name/${nickname}`);
+  } else {
+    res = await axios.get(`organisation/${nickname}`);
+  }
 
   return res.data;
 }
