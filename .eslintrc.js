@@ -10,7 +10,6 @@ module.exports = {
     'sort-imports': ['warn', { ignoreDeclarationSort: true }],
     'eqeqeq': ['warn'],
 
-    'linebreak-style': ['error', 'unix'],
     'no-console': ['warn'],
     'no-duplicate-imports': ['warn'],
     'prefer-const': ['warn'],
