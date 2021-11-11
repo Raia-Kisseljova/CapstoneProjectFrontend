@@ -3,15 +3,40 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: "Open Sans", serif;
+}
+
+.relative {
+  position: relative;
+}
+
+.before {
+  position: absolute;
+  top: 6px;
+  left: -10px;
+  z-index: 2;
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 52.7%));
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 33.5%));
+}
+
+.after {
+  position: absolute;
+  bottom: -23px;
+  right: 5px;
+  z-index: 1;
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 52.7%));
+  filter: drop-shadow(5px 5px 5px rgb(34 34 34 / 33.5%));
 }
 
 .frame {
-  border: 1px solid black;
+  border: 1px solid var(--color-pink);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   padding: 25px;
+  margin-top: 100px;
+  width: 600px;
 }
 
 .file-upload {
@@ -24,4 +49,40 @@
 
 .upload {
   color: black;
+}
+
+.body input {
+  border: 1px solid var(--color-pink);
+  padding-left: 20px;
+  border-radius: 25px;
+  height: 35px;
+  outline: none;
+}
+
+.body textarea {
+  border: 1px solid var(--color-pink);
+  padding-left: 20px;
+  border-radius: 25px;
+  height: 100px;
+  outline: none;
+}
+
+.body select {
+  border: 1px solid var(--color-pink);
+  border-radius: 25px;
+  padding: 5px;
+  height: 35px;
+  outline: none;
+}
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--color-pink);
+  margin-right: 5px;
+}
+
+label {
+  font-family: var(--ff-main);
+  font-size: 14px;
 }
