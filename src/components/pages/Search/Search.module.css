@@ -25,6 +25,11 @@
   cursor: pointer;
 }
 
+.categories button {
+  border: none;
+  background-color: transparent;
+}
+
 .display {
   height: 80vh;
   margin-top: 100px;
@@ -69,4 +74,12 @@
       hsl(29deg 92% 70% / 100%) 0%,
       hsl(0deg 87% 73% / 100%) 100%
     );
+}
+
+.like button {
+  border: none;
+  background-color: transparent;
+  font-size: 70px;
+  font-weight: 100;
+  color: rgb(243 154 154);
 }
