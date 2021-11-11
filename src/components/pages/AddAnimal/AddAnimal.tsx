@@ -2,43 +2,74 @@ import { ErrorMessage } from '@hookform/error-message';
 
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { Redirect } from 'react-router';
+
+import { axios } from 'api';
+import ButtonCustom from 'components/shared/Button/ButtonCustom';
+import Loader from 'components/shared/Loaders/Loader';
+import useCurrentUser from 'hooks/useCurrentUser';
+import { Role, TAnimal } from 'types';
+import { getProfilePath } from 'utils';
 
 // import { useHistory } from 'react-router';
 import styles from './AddAnimal.module.css';
 
-type AddAnimalFormData = {
-  petName: string;
-  type: string;
-  breed: string;
-  location: string;
-  dateOfBirth: string;
-  gender: string;
-  about: string;
-  images: string[];
-  canLiveWithPets: boolean;
-  canLiveWithChildren: boolean;
-  indoorOnly: boolean;
-};
+type AddAnimalFormData = Omit<TAnimal, '_id'>;
 
 export default function AddAnimal() {
+  const { user } = useCurrentUser();
+
+  const uploadImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      console.log(files);
+      for (let i = 0; i < files.length; i++) {
+        const data = new FormData();
+        data.append('animalPics', files[i]);
+        axios.post('upload', data).then(res => res.data);
+        console.log('uploaded', files[i].name);
+      }
+    }
+  };
+
+  const onSubmit = async (data: AddAnimalFormData) => {
+    axios.post('animal', data, {
+      headers: { authorization: `Bearer ` + localStorage.getItem('accessToken') },
+    });
+  };
+
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     // watch,
     formState: { errors },
   } = useForm<AddAnimalFormData>();
   // const history = useHistory();
 
+  if (user === undefined) {
+    return <Loader />;
+  }
+
+  if (user === null) {
+    return <Redirect to={'/login'} />;
+  }
+
+  if (user.role !== Role.ORGANISATION) {
+    return <Redirect to={getProfilePath(user)} />;
+  }
+
   return (
-    <Container className={styles.body}>
+    <Container fluid={true} className={styles.body}>
       <Row>
         <Col>
-          <div>
-            <form className={styles.frame}>
+          <img src='/assets/images/9.png' alt='' width='20%' className={styles.before} />
+          <img src='/assets/images/12.png' alt='' width='22%' className={styles.after} />
+          <div className={styles.relative}>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.frame}>
               {/* PET NAME --TEXT*/}
 
-              <label htmlFor='name'>Pet name : </label>
+              <label htmlFor='name'>Pet name </label>
               <input
                 type='text'
                 placeholder='name'
@@ -51,39 +82,31 @@ export default function AddAnimal() {
                   },
                 })}
               />
-              <ErrorMessage errors={errors} name='petName' as='p' />
+              <br />
+              <ErrorMessage errors={errors} name='petName' as='span' />
 
               {/* TYPE --SELECT*/}
 
               <label htmlFor='type'>Type </label>
-              <select name='type' id='type'>
+              <select id='type' {...register('type')}>
                 <option value='cat'>Cat</option>
                 <option value='dog'>Dog</option>
                 <option value='bird'>Bird</option>
                 <option value='rodent'>Rodent</option>
-                <option value='other'>Other</option>
+                {/* <option value='other'>Other</option> */}
               </select>
+              <br />
 
               {/* BREED --TEXT*/}
 
               <label htmlFor='breed'>Breed : </label>
-              <input
-                type='text'
-                placeholder='breed'
-                id='breed'
-                {...register('breed', {
-                  required: 'This field is required.',
-                  maxLength: {
-                    value: 140,
-                    message: 'This field is too long. Max 140 characters. ',
-                  },
-                })}
-              />
+              <input type='text' placeholder='breed' id='breed' {...register('breed')} />
+              <br />
               <ErrorMessage errors={errors} name='breed' as='p' />
 
               {/* LOCATION --TEXT*/}
 
-              <label htmlFor='location'>City : </label>
+              <label htmlFor='location'>City </label>
               <input
                 type='text'
                 placeholder='city'
@@ -96,46 +119,54 @@ export default function AddAnimal() {
                   },
                 })}
               />
+              <br />
               <ErrorMessage errors={errors} name='location' as='p' />
 
               {/* DATE OF BIRTH --DATE*/}
 
-              <label htmlFor='dateOfBirth'>Date of birth : </label>
+              <label htmlFor='dateOfBirth'>Date of birth </label>
               <input
                 type='date'
                 placeholder='dateOfBirth'
                 id='dateOfBirth'
-                {...register('dateOfBirth', {})}
+                {...register('dateOfBirth')}
               />
+              <br />
               <ErrorMessage errors={errors} name='dateOfBirth' as='p' />
 
               {/* GENDER --SELECT*/}
 
               <label htmlFor='gender'>Gender</label>
-              <select name='gender' id='gender'>
-                <option value='cat'>Good boy</option>
-                <option value='dog'>Beautiful girl</option>
+              <select id='gender' {...register('gender')}>
+                <option value='male'>Boy</option>
+                <option value='female'>Girl</option>
               </select>
+              <br />
 
               {/* DESCRIPTION --TEXT*/}
 
-              <label htmlFor='about'>Description </label>
+              <label htmlFor='description'>Description </label>
               <textarea
                 placeholder='about'
-                id='about'
-                {...register('location', {
+                id='description'
+                {...register('description', {
                   required: 'This field is required.',
-                  maxLength: {
-                    value: 140,
-                    message: 'This field is too long. Max 140 characters. ',
+                  minLength: {
+                    value: 55,
+                    message: 'This field is too short. Min 55 characters. ',
                   },
                 })}
               />
-              <ErrorMessage errors={errors} name='location' as='p' />
+              <br />
+              <ErrorMessage errors={errors} name='description' as='p' />
 
               {/* CAN LIVE WITH PETS --CHECKBOX*/}
               <div>
-                <input type='checkbox' id='canLiveWithPets' name='canLiveWithPets' />
+                <input
+                  type='checkbox'
+                  id='canLiveWithPets'
+                  {...register('canLiveWithPets')}
+                />
                 <label htmlFor='canLiveWithPets'>Can live with other animals</label>
               </div>
 
@@ -145,7 +176,7 @@ export default function AddAnimal() {
                 <input
                   type='checkbox'
                   id='canLiveWithChildren'
-                  name='canLiveWithChildren'
+                  {...register('canLiveWithChildren')}
                 />
                 <label htmlFor='canLiveWithChildren'>Can live with children</label>
               </div>
@@ -153,19 +184,27 @@ export default function AddAnimal() {
               {/* INDOOR ONLY --CHECKBOX*/}
 
               <div>
-                <input type='checkbox' id='indoor' name='indoorOnly' />
+                <input type='checkbox' id='indoor' {...register('indoorOnly')} />
                 <label htmlFor='indoor'>Indoor only</label>
               </div>
 
               {/* IMAGES --UPLOAD*/}
 
               <div className={styles['file-upload']}>
+                <label htmlFor='files'>Select files</label>
+                <input id='files' type='file' multiple onChange={e => uploadImages(e)} />
+                <br />
+              </div>
+
+              {/* <div className={styles['file-upload']}>
                 <label htmlFor='img-array' className={styles['img-label']}>
                   Attach images
                 </label>
                 <br />
                 <input type='file' id='img-array' className={styles.upload} />
-              </div>
+              </div><br /> */}
+
+              <ButtonCustom color='pink'>Submit</ButtonCustom>
             </form>
           </div>
         </Col>
