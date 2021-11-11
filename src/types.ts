@@ -9,6 +9,7 @@ export type TUser = {
   nickname: string;
   fullname: string;
   avatar: string;
+  location: string;
   hobby: string;
   dateOfBirth: string;
   about: string;
@@ -31,3 +32,21 @@ export type TTokenPayload = {
   nickname: string;
   role: Role;
 };
+
+export type TAnimal = {
+  _id: string;
+  petName: string;
+  breed: string;
+  type: string;
+  gender: string;
+  image: string;
+  location: string;
+  description: string;
+  canLiveWithPets: boolean;
+  canLiveWithChildren: boolean;
+  indoorOnly: boolean;
+  dateOfBirth: string;
+};
+
+// export type TAnimalCreate = Omit<TAnimal, '_id'>;
+// export type TAnimalUpdate = Partial<TAnimalCreate>;
