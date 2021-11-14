@@ -1,13 +1,12 @@
-import debouncePromise from 'awesome-debounce-promise';
 import { AxiosError } from 'axios';
 
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Skeleton from 'react-loading-skeleton';
 import { useQuery } from 'react-query';
-
+import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { axios } from 'api';
-import ButtonCustom from 'components/shared/Button/ButtonCustom';
 import useCurrentUser from 'hooks/useCurrentUser';
 import useDebounce from 'hooks/useDebounce';
 import { TAnimal } from 'types';
@@ -15,82 +14,32 @@ import { TAnimal } from 'types';
 import styles from './Search.module.css';
 
 export default function Search() {
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
 
   const [city, setCity] = React.useState('');
-  const [type, setType] = React.useState('all');
-  // const inputRef = React.useRef<HTMLInputElement>(null);
+  const [type, setType] = React.useState('');
 
-  const animalsQuery = useQuery<TAnimal[], AxiosError>(['ANIMALS', city, type], () =>
-    axios.get('animal', { params: { city: city, type: type } }).then(res => res.data)
+  const debouncedCity = useDebounce(city, 500);
+
+  const animalsQuery = useQuery<TAnimal[], AxiosError>(
+    ['ANIMALS', debouncedCity, type],
+    () =>
+      axios.get('animal', { params: { city: debouncedCity, type } }).then(res => res.data)
   );
 
-  // console.log(user.user, "USER")
-
-  // if (user.user?.role === "BasicUser") {
-  //   const nickname = user.user.nickname
-  //   console.log(nickname, "NICKNAME")
-  // }
-
-  // const searchByCity = async () => {
-  //   const animalArray = await fetchAnimals();
-
-  //   const byCity = animalArray.filter(
-  //     animal => animal.location === inputRef.current?.value
-  //   );
-
-  //   setSearch(byCity);
-  // };
-
-  // const [animals, setAnimals] = React.useState<TAnimal[]>([]);
-
-  // const fetchAnimals = async (): Promise<TAnimal[]> => {
-  //   const result = await axios.get('/animal');
-  //   if (result.status === 200) {
-  //     setCity(result.data);
-  //   }
-  //   return result.data;
-  // };
-
-  // const onlyCats = async () => {
-  //   const animalArray = await fetchAnimals();
-  //   setCity(animalArray.filter(animal => animal.type === 'cat'));
-  // };
-
-  // const onlyDogs = async () => {
-  //   const animalArray = await fetchAnimals();
-  //   setCity(animalArray.filter(animal => animal.type === 'dog'));
-  // };
-
-  // const onlyRodents = async () => {
-  //   const animalArray = await fetchAnimals();
-  //   setCity(animalArray.filter(animal => animal.type === 'rodent'));
-  // };
-
-  // const onlyBirds = async () => {
-  //   const animalArray = await fetchAnimals();
-  //   setCity(animalArray.filter(animal => animal.type === 'bird'));
-  // };
-
-  // console.log(search.filter(animal => animal.type === 'cat'));
-
-  // React.useEffect(() => {
-  //   fetchAnimals();
-  // }, []);
-
   const addToFavorites = async (animal: TAnimal) => {
-    if (user.user?.role === 'BasicUser')
+    if (user?.role === 'BasicUser')
       try {
-        const nickname = user.user.nickname;
+        const nickname = user.nickname;
         const animalId = animal._id;
-        console.log(animalId, 'ANIMAL ID');
-        console.log(nickname, 'NICKNAME');
 
-        const result = await axios.post(`user/${nickname}/favourites`, {
+        await axios.post(`user/${nickname}/favourites`, {
           _id: animalId,
         });
+
+        toast.success(`Added ${animal.petName} to favorites!`)
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
   };
 
@@ -139,16 +88,29 @@ export default function Search() {
                 {animalsQuery.data.map(animal => {
                   return (
                     <div className={styles.card} key={animal._id}>
-                      <img src={animal.image} alt='animal' />
+                      <img
+                        src={animal.images[0]}
+                        alt='animal'
+                        className={styles.animalimg}
+                      />
                       <h3>{animal.petName}</h3>
                       <p>{animal.location}</p>
                       <p>{animal.gender}</p>
-                      <ButtonCustom color='pink' className={styles['button-search']}>
-                        Adopt
-                      </ButtonCustom>
-                      <div className={styles.like}>
-                        <button onClick={e => addToFavorites(animal)}>♥</button>
-                      </div>
+                      {
+                        user && <div className={styles.adoptlike}>
+                          <Link
+                            to={`/animal/${animal._id}`}
+                            color='pink'
+                            className={styles['button-adopt']}
+                          >
+                            Adopt
+                          </Link>
+                          <div className={styles.like}>
+                            <button onClick={() => addToFavorites(animal)}>♥</button>
+                          </div>
+                        </div>
+                      }
+
                     </div>
                   );
                 })}
