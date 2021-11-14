@@ -28,8 +28,6 @@ export default function OrganisationProfile() {
     return <div>Not Found</div>;
   }
 
-  console.log('here');
-
   return (
     <Container fluid className={styles.body}>
       <Container className={styles.block}>
