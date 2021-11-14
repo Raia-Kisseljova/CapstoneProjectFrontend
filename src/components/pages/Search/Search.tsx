@@ -2,10 +2,11 @@ import { AxiosError } from 'axios';
 
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import toast from 'react-hot-toast';
 import Skeleton from 'react-loading-skeleton';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
+
 import { axios } from 'api';
 import useCurrentUser from 'hooks/useCurrentUser';
 import useDebounce from 'hooks/useDebounce';
@@ -37,7 +38,7 @@ export default function Search() {
           _id: animalId,
         });
 
-        toast.success(`Added ${animal.petName} to favorites!`)
+        toast.success(`Added ${animal.petName} to favorites!`);
       } catch (error) {
         // console.log(error);
       }
@@ -96,8 +97,8 @@ export default function Search() {
                       <h3>{animal.petName}</h3>
                       <p>{animal.location}</p>
                       <p>{animal.gender}</p>
-                      {
-                        user && <div className={styles.adoptlike}>
+                      {user && (
+                        <div className={styles.adoptlike}>
                           <Link
                             to={`/animal/${animal._id}`}
                             color='pink'
@@ -109,8 +110,7 @@ export default function Search() {
                             <button onClick={() => addToFavorites(animal)}>♥</button>
                           </div>
                         </div>
-                      }
-
+                      )}
                     </div>
                   );
                 })}

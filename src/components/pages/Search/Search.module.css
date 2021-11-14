@@ -5,7 +5,7 @@
   flex-direction: column;
 }
 
-a{
+a {
   color: white;
   text-decoration: none;
 }
@@ -61,14 +61,14 @@ a{
 }
 
 .card p {
-  color:#AD5071;
+  color: #ad5071;
   font-size: 16px;
   font-family: var(--ff-main), sans-serif;
   margin-bottom: 0;
 }
 
 .card h3 {
-  color: #AD5071;
+  color: #ad5071;
 }
 
 .display .card img {
