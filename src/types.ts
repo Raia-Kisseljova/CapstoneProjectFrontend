@@ -39,7 +39,7 @@ export type TAnimal = {
   breed: string;
   type: string;
   gender: string;
-  image: string;
+  images: string[];
   location: string;
   description: string;
   canLiveWithPets: boolean;
