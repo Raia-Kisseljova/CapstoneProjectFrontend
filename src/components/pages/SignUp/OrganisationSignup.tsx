@@ -43,6 +43,12 @@ export default function OrganisationSignUp() {
       <Row>
         <Col>
           <div className={styles.frame}>
+            <img
+              src='/assets/images/11.png'
+              width='30%'
+              alt=''
+              className={styles.before}
+            />
             <form onSubmit={handleSubmit(onSubmit)}>
               <label htmlFor='name'>Organisation name *</label>
               <br />
@@ -154,7 +160,9 @@ export default function OrganisationSignUp() {
                 <input type='file' id='avatar' className={styles.upload} />
               </div>
 
-              <ButtonCustom color='pink'>Sign up</ButtonCustom>
+              <ButtonCustom color='pink' className='w-100'>
+                Sign up
+              </ButtonCustom>
             </form>
           </div>
         </Col>

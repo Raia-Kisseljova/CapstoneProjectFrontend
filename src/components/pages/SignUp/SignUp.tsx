@@ -3,7 +3,6 @@ import { Container, Row } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 
 import useCurrentUser from 'hooks/useCurrentUser';
-import { Role } from 'types';
 import { getProfilePath } from 'utils';
 
 import OrganisationSignup from './OrganisationSignup';

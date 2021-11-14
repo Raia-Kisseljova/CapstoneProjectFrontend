@@ -43,16 +43,17 @@ export default function UserSignUp() {
     <Container fluid className={styles.body}>
       <Row>
         <Col>
+          <img src='/assets/images/7.png' alt='' width='35%' className={styles.before} />
           <div className={styles.frame}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <label htmlFor='name'>Fullname </label>
-              <br />
+
               <input type='text' placeholder='name' id='name' {...register('fullname')} />
-              <br />
+
               <ErrorMessage errors={errors} name='fullname' as='p' />
 
               <label htmlFor='email'>Email *</label>
-              <br />
+
               <input
                 type='text'
                 placeholder='email'
@@ -63,11 +64,11 @@ export default function UserSignUp() {
                   validate: debouncePromise(validateEmail, 500),
                 })}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='email' as='p' />
 
               <label htmlFor='password'>Password *</label>
-              <br />
+
               <input
                 type='password'
                 placeholder='password'
@@ -78,11 +79,11 @@ export default function UserSignUp() {
                   maxLength: 100,
                 })}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='password' as='p' />
 
               <label htmlFor='passwordConf'>Password confirm *</label>
-              <br />
+
               <input
                 type='password'
                 placeholder='password confirm'
@@ -96,11 +97,11 @@ export default function UserSignUp() {
                   },
                 })}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='passwordConfirm' as='p' />
 
               <label htmlFor='city'>City *</label>
-              <br />
+
               <input
                 type='text'
                 placeholder='City'
@@ -110,11 +111,11 @@ export default function UserSignUp() {
                   maxLength: 100,
                 })}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='location' as='p' />
 
               <label htmlFor='nickname'>Nickname *</label>
-              <br />
+
               <input
                 type='text'
                 placeholder='nickname'
@@ -128,57 +129,58 @@ export default function UserSignUp() {
                   validate: debouncePromise(validateNickname, 500),
                 })}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='nickname' as='p' />
 
               <label htmlFor='about'>About you</label>
-              <br />
+
               <input
                 type='text'
                 placeholder='description'
                 id='about'
                 {...register('about')}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='about' as='p' />
 
               <label htmlFor='hobby'>Hobby/interests</label>
-              <br />
+
               <input type='text' placeholder='hobby' id='hobby' {...register('hobby')} />
-              <br />
+
               <ErrorMessage errors={errors} name='hobby' as='p' />
 
               <label htmlFor='occupation'>Occupation</label>
-              <br />
+
               <input
                 type='text'
                 placeholder='occupation'
                 id='occupation'
                 {...register('occupation')}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='occupation' as='p' />
 
               <label htmlFor='dob'>Date of birth</label>
-              <br />
+
               <input
                 type='date'
                 placeholder='date of birth'
                 id='dob'
                 {...register('dateOfBirth')}
               />
-              <br />
+
               <ErrorMessage errors={errors} name='dateOfBirth' as='p' />
 
               <div className={styles['file-upload']}>
                 <label htmlFor='avatar' className={styles['avatar-label']}>
                   Avatar
                 </label>
-                <br />
                 <input type='file' id='avatar' className={styles.upload} />
               </div>
 
-              <ButtonCustom color='pink'>Sign Up</ButtonCustom>
+              <ButtonCustom color='pink' className='w-100'>
+                Sign Up
+              </ButtonCustom>
             </form>
           </div>
         </Col>

@@ -2,8 +2,8 @@ import { ErrorMessage } from '@hookform/error-message';
 
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useForm, Controller } from 'react-hook-form';
-import { Redirect } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { Redirect, useHistory } from 'react-router';
 
 import { axios } from 'api';
 import ButtonCustom from 'components/shared/Button/ButtonCustom';
@@ -15,35 +15,53 @@ import { getProfilePath } from 'utils';
 // import { useHistory } from 'react-router';
 import styles from './AddAnimal.module.css';
 
-type AddAnimalFormData = Omit<TAnimal, '_id'>;
+type AddAnimalFormData = Omit<TAnimal, '_id'> & { files: File[] };
 
 export default function AddAnimal() {
+  const history = useHistory();
   const { user } = useCurrentUser();
 
-  const uploadImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      console.log(files);
-      for (let i = 0; i < files.length; i++) {
-        const data = new FormData();
-        data.append('animalPics', files[i]);
-        axios.post('upload', data).then(res => res.data);
-        console.log('uploaded', files[i].name);
+  /*   const uploadImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files) {
+        console.log(files);
+        for (let i = 0; i < files.length; i++) {
+          const data = new FormData();
+          data.append('animalPics', files[i]);
+          axios.post('upload', data).then(res => res.data)
+          console.log('uploaded', files[i].name);
+        }
       }
-    }
-  };
+    }; */
+
+  /* let arr = [1, 2, 3, 4, 5];
+  let doubleArr = arr.map(n => n * 2); */
 
   const onSubmit = async (data: AddAnimalFormData) => {
-    axios.post('animal', data, {
-      headers: { authorization: `Bearer ` + localStorage.getItem('accessToken') },
-    });
+    const { files, ...jsonData } = data;
+
+    try {
+      const res = await axios.post<TAnimal>('animal', jsonData, {
+        // headers: { authorization: `Bearer ` + localStorage.getItem('accessToken') },
+      });
+      const fd = new FormData();
+      for (const file of files) {
+        fd.append('animalPics', file, file.name);
+      }
+      await axios.post(`animal/${res.data._id}/upload`, fd, {
+        headers: { 'content-type': 'multipart/form-data' },
+      });
+      history.push(`/animal/${res.data._id}`);
+    } catch (err) {
+      //
+    }
   };
 
   const {
     register,
     handleSubmit,
     // watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<AddAnimalFormData>();
   // const history = useHistory();
 
@@ -63,8 +81,8 @@ export default function AddAnimal() {
     <Container fluid={true} className={styles.body}>
       <Row>
         <Col>
-          <img src='/assets/images/9.png' alt='' width='20%' className={styles.before} />
-          <img src='/assets/images/12.png' alt='' width='22%' className={styles.after} />
+          <img src='/assets/images/9.png' alt='' width='25%' className={styles.before} />
+          <img src='/assets/images/12.png' alt='' width='30%' className={styles.after} />
           <div className={styles.relative}>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.frame}>
               {/* PET NAME --TEXT*/}
@@ -161,38 +179,65 @@ export default function AddAnimal() {
               <ErrorMessage errors={errors} name='description' as='p' />
 
               {/* CAN LIVE WITH PETS --CHECKBOX*/}
-              <div>
-                <input
-                  type='checkbox'
-                  id='canLiveWithPets'
-                  {...register('canLiveWithPets')}
-                />
-                <label htmlFor='canLiveWithPets'>Can live with other animals</label>
+              <div className={styles.checkboxes}>
+                <div>
+                  <input
+                    type='checkbox'
+                    id='canLiveWithPets'
+                    {...register('canLiveWithPets')}
+                  />
+                  <label htmlFor='canLiveWithPets'>
+                    <span>Can live with other animals</span>
+                  </label>
+                </div>
+
+                {/* CAN LIVE WITH CHILDREN --CHECKBOX*/}
+
+                <div>
+                  <label htmlFor='canLiveWithChildren'>
+                    {' '}
+                    <input
+                      type='checkbox'
+                      id='canLiveWithChildren'
+                      {...register('canLiveWithChildren')}
+                    />
+                    <span>Can live with children</span>
+                  </label>
+                </div>
+
+                {/* INDOOR ONLY --CHECKBOX*/}
+
+                <div>
+                  <label htmlFor='indoor'>
+                    {' '}
+                    <input type='checkbox' id='indoor' {...register('indoorOnly')} />
+                    <span>Indoor only</span>
+                  </label>
+                </div>
               </div>
-
-              {/* CAN LIVE WITH CHILDREN --CHECKBOX*/}
-
-              <div>
-                <input
-                  type='checkbox'
-                  id='canLiveWithChildren'
-                  {...register('canLiveWithChildren')}
-                />
-                <label htmlFor='canLiveWithChildren'>Can live with children</label>
-              </div>
-
-              {/* INDOOR ONLY --CHECKBOX*/}
-
-              <div>
-                <input type='checkbox' id='indoor' {...register('indoorOnly')} />
-                <label htmlFor='indoor'>Indoor only</label>
-              </div>
-
               {/* IMAGES --UPLOAD*/}
 
-              <div className={styles['file-upload']}>
-                <label htmlFor='files'>Select files</label>
-                <input id='files' type='file' multiple onChange={e => uploadImages(e)} />
+              <div>
+                <label htmlFor='files'>
+                  <input
+                    id='files'
+                    type='file'
+                    multiple
+                    {...register('files', {
+                      required: 'At least 1 image is required',
+                      validate: files => {
+                        for (const file of files) {
+                          if (file.size > 2 * 1024 * 1024) {
+                            return 'File is too big. Max is 2MB.';
+                          }
+                        }
+                        return true;
+                      },
+                    })}
+                    className={styles['custom-upload']}
+                  />
+                </label>
+                <ErrorMessage errors={errors} name='files' as='p' />
                 <br />
               </div>
 
@@ -204,7 +249,9 @@ export default function AddAnimal() {
                 <input type='file' id='img-array' className={styles.upload} />
               </div><br /> */}
 
-              <ButtonCustom color='pink'>Submit</ButtonCustom>
+              <ButtonCustom color='pink' className={styles.wbtn}>
+                {isSubmitting ? 'Creating...' : 'Create'}
+              </ButtonCustom>
             </form>
           </div>
         </Col>
