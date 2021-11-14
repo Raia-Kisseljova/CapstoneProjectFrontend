@@ -1,4 +1,5 @@
 import React from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Route, Switch } from 'react-router-dom';
 
 import OrganisationProfile from 'components/pages/OrganisationProfile';
@@ -23,11 +24,12 @@ function App() {
         <Route path='/login' component={Login} />
         <Route path='/users/:username' component={UserProfile} />
         <Route path='/organisation/:name' component={OrganisationProfile} />
-        <Route path='/settings' component={UserSettings} />
+        <Route path='/users/:nickname/settings' component={UserSettings} />
         <Route path='/add-animal' component={AddAnimal} />
         <Route path='/search' component={Search} />
-        <Route path='/animals/:slug' component={AnimalProfile} />
+        <Route path='/animal/:_id' component={AnimalProfile} />
       </Switch>
+      <Toaster />
     </>
   );
 }
