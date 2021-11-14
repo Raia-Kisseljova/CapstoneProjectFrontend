@@ -11,6 +11,7 @@ module.exports = {
     'eqeqeq': ['warn'],
 
     'no-console': ['warn'],
+    'no-debugger': ['warn'],
     'no-duplicate-imports': ['warn'],
     'prefer-const': ['warn'],
 
