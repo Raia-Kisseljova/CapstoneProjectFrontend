@@ -24,12 +24,12 @@ export default function NavBar() {
           <img src='/assets/images/Logo.png' alt='' className='logo' />
         </Navbar.Brand>
         <Nav className='me-auto'>
-          <Link to={'/'} className='nav-link bold'>
+          <Link to={'/'} className='nav-link bold line-1'>
             Home
           </Link>
 
           {user && (
-            <Link to={getProfilePath(user)} className='nav-link bold'>
+            <Link to={getProfilePath(user)} className='nav-link bold line-2'>
               Profile
             </Link>
           )}
@@ -41,7 +41,7 @@ export default function NavBar() {
           )}
 
           {user && (
-            <button className='logout-btn' onClick={onLogoutClick}>
+            <button className='logout-btn line-3' onClick={onLogoutClick}>
               Logout
             </button>
           )}
