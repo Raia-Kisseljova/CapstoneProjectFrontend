@@ -11,10 +11,13 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  z-index: 0;
+  z-index: -10;
 }
 
 .background img {
+  z-index: 0;
+  mix-blend-mode: multiply;
+  opacity: 18%;
   width: 35px;
   backface-visibility: hidden;
   position: absolute;
