@@ -17,7 +17,7 @@ export default function Home() {
       <div>
         <Animation />
 
-        <Container fluid={true} >
+        <Container fluid={true}>
           <Row>
             <Col className={styles['block-1-test']}>
               <img
