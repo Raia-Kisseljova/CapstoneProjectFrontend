@@ -32,6 +32,7 @@ a {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  margin-bottom: 50px;
 }
 
 .categories button {
@@ -39,10 +40,10 @@ a {
   background-color: transparent;
 }
 
-.display {
+/* .display {
   height: 80vh;
   margin-top: 100px;
-}
+} */
 
 .display .card {
   display: flex;
@@ -98,14 +99,165 @@ a {
 
 .like button {
   border: none;
-  background-color: transparent;
-  font-size: 70px;
+  background-color: rgb(255 255 255 / 33.5%);
+  border-radius: 100px;
+  font-size: 50px;
   font-weight: 100;
   margin-left: 15px;
-  color: #ce6b86;
+  color: rgb(197 59 59);
 }
 
 .adoptlike {
   display: flex;
   align-items: center;
+}
+
+/* BIRD */
+
+.display .bird {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* background: hsl(16deg 100% 76% / 100%); */
+  background: linear-gradient(90deg, hsl(338deg 38% 48% / 100%) 0%, hsl(344deg 51% 62% / 100%) 100%);
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.bird p {
+  color: white;
+  font-size: 16px;
+  font-family: var(--ff-main), sans-serif;
+  margin-bottom: 0;
+}
+
+.bird h3 {
+  color: white;
+}
+
+.display .bird img {
+  width: 150px;
+  height: 150px;
+  border-radius: 25px;
+}
+
+/* RODENTS */
+
+.display .rodent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, hsl(242deg 65% 63% / 100%) 0%, hsl(313deg 93% 82% / 100%) 100%);
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.rodent p {
+  color: white;
+  font-size: 16px;
+  font-family: var(--ff-main), sans-serif;
+  margin-bottom: 0;
+}
+
+.rodent h3 {
+  color: white;
+}
+
+.display .rodent img {
+  width: 150px;
+  height: 150px;
+  border-radius: 25px;
+}
+
+/* DOG */
+
+.display .dog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, hsl(209deg 47% 81% / 100%) 0%, hsl(210deg 41% 59% / 100%) 100%);
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.dog p {
+  color: white;
+  font-size: 16px;
+  font-family: var(--ff-main), sans-serif;
+  margin-bottom: 0;
+}
+
+.dog h3 {
+  color: white;
+}
+
+.display .dog img {
+  width: 150px;
+  height: 150px;
+  border-radius: 25px;
+}
+
+@media (max-width: 575.98px) {
+  .categories {
+    display: block;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .display .card {
+    display: block;
+  }
+
+  .display .card img {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .categories {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+
+  .display .card {
+    display: block;
+  }
+
+  .display .card img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .display .dog {
+    display: block;
+  }
+
+  .display .dog img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .display .rodent {
+    display: block;
+  }
+
+  .display .rodent img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .display .bird {
+    display: block;
+  }
+
+  .display .bird img {
+    width: 300px;
+    height: 300px;
+  }
 }

@@ -85,10 +85,21 @@ export default function Search() {
                 <Skeleton circle count={5} width={50} height={50} />
               </div>
             ) : animalsQuery.isSuccess ? (
-              <div>
+              <Col>
                 {animalsQuery.data.map(animal => {
                   return (
-                    <div className={styles.card} key={animal._id}>
+                    <div
+                      className={
+                        animal.type === 'bird'
+                          ? styles.bird
+                          : animal.type === 'rodent'
+                          ? styles.rodent
+                          : animal.type === 'dog'
+                          ? styles.dog
+                          : styles.card
+                      }
+                      key={animal._id}
+                    >
                       <img
                         src={animal.images[0]}
                         alt='animal'
@@ -97,6 +108,7 @@ export default function Search() {
                       <h3>{animal.petName}</h3>
                       <p>{animal.location}</p>
                       <p>{animal.gender}</p>
+
                       {user && (
                         <div className={styles.adoptlike}>
                           <Link
@@ -114,7 +126,7 @@ export default function Search() {
                     </div>
                   );
                 })}
-              </div>
+              </Col>
             ) : animalsQuery.isError ? (
               <div>{animalsQuery.error.response?.status}</div>
             ) : null}
