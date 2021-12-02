@@ -1,6 +1,6 @@
 /* BLOCK 1 */
 .block-1-test {
-  margin-top: 55px;
+  margin: 55px 0;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -16,7 +16,7 @@
 }
 
 .sub-title-test {
-  margin: 35px 0;
+  margin: 25px 0;
   font-size: 25px !important;
   font-family: "Open Sans", sans-serif !important;
 }
@@ -146,3 +146,42 @@ label {
   font-size: 20px;
   font-size: 40px;
 }
+
+@media (min-width: 320px) {
+  .block-1-test p {
+    font-size: 1.2rem;
+  }
+
+  .sub-title-test {
+    font-size: 1rem !important;
+  }
+
+  .block-1-test button {
+    margin-bottom: 15px;
+  }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .block-1-test p {
+    font-size: 2.2rem;
+  }
+
+  .sub-title-test {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .block-1-test p {
+    font-size: 3rem;
+  }
+
+  .sub-title-test {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+/* @media (min-width: 992px) {  } */

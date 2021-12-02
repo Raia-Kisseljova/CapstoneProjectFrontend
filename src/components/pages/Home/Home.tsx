@@ -17,30 +17,32 @@ export default function Home() {
       <div>
         <Animation />
 
-        <Container fluid={true}>
-          <Row className={styles['block-1-test']}>
-            <img
-              src='/assets/images/Shelter.png'
-              alt=''
-              className={styles['shelter-img']}
-            />
-            <p>
-              Find your new <span>family</span> member.
-            </p>
+        <Container fluid={true} >
+          <Row>
+            <Col className={styles['block-1-test']}>
+              <img
+                src='/assets/images/Shelter.png'
+                alt=''
+                className={styles['shelter-img']}
+              />
+              <p>
+                Find your new <span>family</span> member.
+              </p>
 
-            <p className={styles['sub-title-test']}>
-              Be a proud foster parent. Adopt your new family member today.
-            </p>
-            <div>
-              <Link to='/search'>
-                <button className='search-btn'>Search</button>
-              </Link>
-              {user && user.role === Role.ORGANISATION && (
-                <Link to='/add-animal'>
-                  <button className='post-btn'>Post</button>
+              <p className={styles['sub-title-test']}>
+                Be a proud foster parent. Adopt your new family member today.
+              </p>
+              <div>
+                <Link to='/search'>
+                  <button className='search-btn'>Search</button>
                 </Link>
-              )}
-            </div>
+                {user && user.role === Role.ORGANISATION && (
+                  <Link to='/add-animal'>
+                    <button className='post-btn'>Post</button>
+                  </Link>
+                )}
+              </div>
+            </Col>
           </Row>
         </Container>
         {/* <Container fluid className={styles['block-1']}>
@@ -82,7 +84,7 @@ export default function Home() {
 
         {/* BLOCK 2 */}
 
-        <Container fluid className={styles['block-2']}>
+        {/* <Container fluid className={styles['block-2']}>
           <Row className='mx-3'>
             <Col>
               <p>
@@ -105,9 +107,9 @@ export default function Home() {
           </Row>
         </Container>
 
-        {/* BLOCK 3 */}
+        BLOCK 3 */}
 
-        <Container fluid className={styles['block-3']}>
+        {/* <Container fluid className={styles['block-3']}>
           <Row className='mx-3'>
             <Col>
               <p>
@@ -118,8 +120,10 @@ export default function Home() {
               </p>
             </Col>
           </Row>
-          <Row>{/* Space for blogs */}</Row>
-        </Container>
+          <Row>
+            Space for blogs
+          </Row>
+        </Container> */}
       </div>
     </>
   );
