@@ -2,14 +2,13 @@ a {
   color: white;
 }
 
-.body {
-  /* font-family: var(--ff-main); */
+/* .body {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .before {
   position: absolute;

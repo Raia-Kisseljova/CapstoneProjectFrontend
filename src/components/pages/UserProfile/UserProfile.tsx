@@ -88,31 +88,31 @@ export default function UserProfile() {
               </div>
             </div>
           </Col>
+          <div>
+            <h3 className='mt-5'>Favourites</h3>
+            {favouritesQuery.isLoading ? (
+              <div>
+                <Skeleton circle count={5} width={50} height={50} />
+              </div>
+            ) : favouritesQuery.isSuccess ? (
+              <div>
+                {favouritesQuery.data.map(animal => {
+                  return (
+                    <div key={animal._id} className={styles.animals}>
+                      <img src={animal.images[0]} alt='img' width='50px' />
+                      <Link to={`/animal/${animal._id}`} className='ml-3'>
+                        {animal.petName}{' '}
+                      </Link>
+                      <button onClick={() => remove(animal._id)}>&times; </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : favouritesQuery.isError ? (
+              <div>{favouritesQuery.error.response?.status}</div>
+            ) : null}
+          </div>
         </Row>
-        <div>
-          <h3 className='mt-5'>Favourites</h3>
-          {favouritesQuery.isLoading ? (
-            <div>
-              <Skeleton circle count={5} width={50} height={50} />
-            </div>
-          ) : favouritesQuery.isSuccess ? (
-            <div>
-              {favouritesQuery.data.map(animal => {
-                return (
-                  <div key={animal._id} className={styles.animals}>
-                    <img src={animal.images[0]} alt='img' width='50px' />
-                    <Link to={`/animal/${animal._id}`} className='ml-3'>
-                      {animal.petName}{' '}
-                    </Link>
-                    <button onClick={() => remove(animal._id)}>&times; </button>
-                  </div>
-                );
-              })}
-            </div>
-          ) : favouritesQuery.isError ? (
-            <div>{favouritesQuery.error.response?.status}</div>
-          ) : null}
-        </div>
       </Container>
     </Container>
   );
