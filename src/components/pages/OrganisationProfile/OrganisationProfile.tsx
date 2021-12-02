@@ -29,7 +29,7 @@ export default function OrganisationProfile() {
   }
 
   return (
-    <Container fluid className={styles.body}>
+    <Container fluid>
       <Container className={styles.block}>
         <img src='/assets/images/3.png' className={styles.before} alt='before' />
         <img src='/assets/images/2.png' className={styles.after} alt='after' />
